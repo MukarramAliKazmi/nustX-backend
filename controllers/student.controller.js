@@ -5,7 +5,7 @@ exports.studentCreate = async (req, res) => {
   try {
     const { name, username, password, gender, dateOfBirth, discipline, semester, cgpa } = req.body;
     
-    if ( !name || !username || !password || !gender || !dateOfBirth || !discipline || !semester || !cgpa ) {
+    if (!name || !username || !password || !gender || !dateOfBirth || !discipline || !semester || !cgpa) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
