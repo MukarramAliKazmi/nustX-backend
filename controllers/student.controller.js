@@ -33,9 +33,7 @@ exports.studentList = async (req, res) => {
   try {
     const students = await Student.find();
 
-    res
-      .status(200)
-      .json({ message: "Students retrieved successfully", students });
+    res.status(200).json({ message: "Students retrieved successfully", students });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -52,9 +50,7 @@ exports.studentDetail = async (req, res) => {
       return res.status(404).json({ message: "Student not found" });
     }
 
-    res
-      .status(200)
-      .json({ message: "Student retrieved successfully", student });
+    res.status(200).json({ message: "Student retrieved successfully", student });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

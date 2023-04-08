@@ -16,9 +16,7 @@ exports.disciplineCreate = async (req, res) => {
 
     await discipline.save();
 
-    res
-      .status(201)
-      .json({ message: "Discipline created successfully", discipline });
+    res.status(201).json({ message: "Discipline created successfully", discipline });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -29,9 +27,7 @@ exports.disciplineList = async (req, res) => {
   try {
     const disciplines = await Discipline.find().sort("name");
 
-    res
-      .status(200)
-      .json({ message: "Disciplines retrieved successfully", disciplines });
+    res.status(200).json({ message: "Disciplines retrieved successfully", disciplines });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -48,9 +44,7 @@ exports.disciplineDetail = async (req, res) => {
       return res.status(404).json({ message: "Discipline not found" });
     }
 
-    res
-      .status(200)
-      .json({ message: "Discipline retrieved successfully", discipline });
+    res.status(200).json({ message: "Discipline retrieved successfully", discipline });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -69,9 +63,7 @@ exports.disciplineUpdate = async (req, res) => {
       return res.status(404).json({ message: "Discipline not found" });
     }
 
-    res
-      .status(200)
-      .json({ message: "Discipline updated successfully", discipline });
+    res.status(200).json({ message: "Discipline updated successfully", discipline });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -88,9 +80,7 @@ exports.disciplineDelete = async (req, res) => {
       return res.status(404).json({ message: "Discipline not found" });
     }
 
-    res
-      .status(200)
-      .json({ message: "Discipline deleted successfully", discipline });
+    res.status(200).json({ message: "Discipline deleted successfully", discipline });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

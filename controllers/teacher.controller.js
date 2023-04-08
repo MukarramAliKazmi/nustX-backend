@@ -31,9 +31,7 @@ exports.teacherList = async (req, res) => {
   try {
     const teachers = await Teacher.find();
 
-    res
-      .status(200)
-      .json({ message: "Teachers retrieved successfully", teachers });
+    res.status(200).json({ message: "Teachers retrieved successfully", teachers });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -50,9 +48,7 @@ exports.teacherDetail = async (req, res) => {
       return res.status(404).json({ message: "Teacher not found" });
     }
 
-    res
-      .status(200)
-      .json({ message: "Teacher retrieved successfully", teacher });
+    res.status(200).json({ message: "Teacher retrieved successfully", teacher });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
