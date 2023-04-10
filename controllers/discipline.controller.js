@@ -3,7 +3,7 @@ const Discipline = require("../models/discipline.model");
 // Create a new discipline
 exports.disciplineCreate = async (req, res) => {
   try {
-    const { name, semesters } = req.body;
+    const { name, semesters, courses, teachers, students } = req.body;
 
     if (!name || !semesters) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -12,11 +12,16 @@ exports.disciplineCreate = async (req, res) => {
     const discipline = new Discipline({
       name,
       semesters,
+      courses,
+      teachers,
+      students,
     });
 
     await discipline.save();
 
-    res.status(201).json({ message: "Discipline created successfully", discipline });
+    res
+      .status(201)
+      .json({ message: "Discipline created successfully", discipline });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -25,9 +30,15 @@ exports.disciplineCreate = async (req, res) => {
 // Get all disciplines
 exports.disciplineList = async (req, res) => {
   try {
-    const disciplines = await Discipline.find().sort("name");
+    const disciplines = await Discipline.find()
+      .sort("name")
+      .populate("courses")
+      .populate("teachers")
+      .populate("students");
 
-    res.status(200).json({ message: "Disciplines retrieved successfully", disciplines });
+    res
+      .status(200)
+      .json({ message: "Disciplines retrieved successfully", disciplines });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -38,13 +49,18 @@ exports.disciplineDetail = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const discipline = await Discipline.findById(id);
+    const discipline = await Discipline.findById(id)
+      .populate("courses")
+      .populate("teachers")
+      .populate("students");
 
     if (!discipline) {
       return res.status(404).json({ message: "Discipline not found" });
     }
 
-    res.status(200).json({ message: "Discipline retrieved successfully", discipline });
+    res
+      .status(200)
+      .json({ message: "Discipline retrieved successfully", discipline });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -57,13 +73,18 @@ exports.disciplineUpdate = async (req, res) => {
 
     const discipline = await Discipline.findByIdAndUpdate(id, req.body, {
       new: true,
-    });
+    })
+      .populate("courses")
+      .populate("teachers")
+      .populate("students");
 
     if (!discipline) {
       return res.status(404).json({ message: "Discipline not found" });
     }
 
-    res.status(200).json({ message: "Discipline updated successfully", discipline });
+    res
+      .status(200)
+      .json({ message: "Discipline updated successfully", discipline });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -80,7 +101,9 @@ exports.disciplineDelete = async (req, res) => {
       return res.status(404).json({ message: "Discipline not found" });
     }
 
-    res.status(200).json({ message: "Discipline deleted successfully", discipline });
+    res
+      .status(200)
+      .json({ message: "Discipline deleted successfully", discipline });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
