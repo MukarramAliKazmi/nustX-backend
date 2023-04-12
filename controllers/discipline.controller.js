@@ -85,27 +85,12 @@ exports.disciplineDelete = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const courses = await Course.find().populate("discipline");
-    const students = await Student.find().populate("discipline");
-    const teachers = await Teacher.find().populate("discipline");
+    // Check if there are any courses, students, or teachers that reference the discipline id
+    const courseExists = await Course.exists({ discipline: id });
+    const studentExists = await Student.exists({ discipline: id });
+    const teacherExists = await Teacher.exists({ discipline: id });
 
-    const filteredCourses = courses.filter(
-      (course) => course.discipline.id === id
-    );
-
-    const filteredStudents = students.filter(
-      (student) => student.discipline.id === id
-    );
-
-    const filteredTeachers = teachers.filter(
-      (teacher) => teacher.discipline.id === id
-    );
-
-    if (
-      filteredCourses.length !== 0 ||
-      filteredStudents.length !== 0 ||
-      filteredTeachers.length !== 0
-    ) {
+    if (courseExists || studentExists || teacherExists) {
       return res.status(404).json({
         message:
           "Cannot remove the discipline because it is referenced by some courses, students and teachers. Please remove them first before removing the discipline.",
