@@ -1,9 +1,12 @@
 const Discipline = require("../models/discipline.model");
+const Course = require("../models/course.model");
+const Student = require("../models/student.model");
+const Teacher = require("../models/teacher.model");
 
 // Create a new discipline
 exports.disciplineCreate = async (req, res) => {
   try {
-    const { name, semesters, courses, teachers, students } = req.body;
+    const { name, semesters } = req.body;
 
     if (!name || !semesters) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -12,9 +15,6 @@ exports.disciplineCreate = async (req, res) => {
     const discipline = new Discipline({
       name,
       semesters,
-      courses,
-      teachers,
-      students,
     });
 
     await discipline.save();
@@ -30,11 +30,7 @@ exports.disciplineCreate = async (req, res) => {
 // Get all disciplines
 exports.disciplineList = async (req, res) => {
   try {
-    const disciplines = await Discipline.find()
-      .sort("name")
-      .populate("courses")
-      .populate("teachers")
-      .populate("students");
+    const disciplines = await Discipline.find().sort("name");
 
     res
       .status(200)
@@ -49,10 +45,7 @@ exports.disciplineDetail = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const discipline = await Discipline.findById(id)
-      .populate("courses")
-      .populate("teachers")
-      .populate("students");
+    const discipline = await Discipline.findById(id);
 
     if (!discipline) {
       return res.status(404).json({ message: "Discipline not found" });
@@ -73,10 +66,7 @@ exports.disciplineUpdate = async (req, res) => {
 
     const discipline = await Discipline.findByIdAndUpdate(id, req.body, {
       new: true,
-    })
-      .populate("courses")
-      .populate("teachers")
-      .populate("students");
+    });
 
     if (!discipline) {
       return res.status(404).json({ message: "Discipline not found" });
@@ -95,6 +85,33 @@ exports.disciplineDelete = async (req, res) => {
   try {
     const { id } = req.params;
 
+    const courses = await Course.find().populate("discipline");
+    const students = await Student.find().populate("discipline");
+    const teachers = await Teacher.find().populate("discipline");
+
+    const filteredCourses = courses.filter(
+      (course) => course.discipline.id === id
+    );
+
+    const filteredStudents = students.filter(
+      (student) => student.discipline.id === id
+    );
+
+    const filteredTeachers = teachers.filter(
+      (teacher) => teacher.discipline.id === id
+    );
+
+    if (
+      filteredCourses.length !== 0 ||
+      filteredStudents.length !== 0 ||
+      filteredTeachers.length !== 0
+    ) {
+      return res.status(404).json({
+        message:
+          "Cannot remove the discipline because it is referenced by some courses, students and teachers. Please remove them first before removing the discipline.",
+      });
+    }
+
     const discipline = await Discipline.findByIdAndDelete(id);
 
     if (!discipline) {
@@ -104,6 +121,66 @@ exports.disciplineDelete = async (req, res) => {
     res
       .status(200)
       .json({ message: "Discipline deleted successfully", discipline });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get all courses by discipline id
+exports.courseListByDiscipline = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const courses = await Course.find().populate("discipline");
+
+    // Filter by the discipline id
+    const filteredCourses = courses.filter(
+      (course) => course.discipline.id === id
+    );
+
+    res
+      .status(200)
+      .json({ message: "Courses retrieved successfully", filteredCourses });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get all students by discipline id
+exports.studentListByDiscipline = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const students = await Student.find().populate("discipline");
+
+    // Filter by the discipline id
+    const filteredStudents = students.filter(
+      (student) => student.discipline.id === id
+    );
+
+    res
+      .status(200)
+      .json({ message: "Students retrieved successfully", filteredStudents });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get all teachers by discipline id
+exports.teacherListByDiscipline = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const teachers = await Teacher.find().populate("discipline");
+
+    // Filter by the discipline id
+    const filteredTeachers = teachers.filter(
+      (teacher) => teacher.discipline.id === id
+    );
+
+    res
+      .status(200)
+      .json({ message: "Teachers retrieved successfully", filteredTeachers });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

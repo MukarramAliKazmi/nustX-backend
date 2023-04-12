@@ -9,7 +9,7 @@ const TeacherSchema = new Schema(
     password: { type: String, required: true },
     gender: { type: String, enum: ["male", "female", "other"], required: true },
     dateOfBirth: { type: Date, required: true },
-    discipline: { type: String, required: true },
+    discipline: { type: Schema.Types.ObjectId, ref: "Discipline", required: true },
   },
   {
     timestamps: true,

@@ -11,6 +11,9 @@ router.get("/disciplines", disciplineController.disciplineList);
 router.get("/disciplines/:id", disciplineController.disciplineDetail);
 router.put("/disciplines/:id", disciplineController.disciplineUpdate);
 router.delete("/disciplines/:id", disciplineController.disciplineDelete);
+router.get("/disciplines/:id/courses", disciplineController.courseListByDiscipline);
+router.get("/disciplines/:id/students", disciplineController.studentListByDiscipline);
+router.get("/disciplines/:id/teachers", disciplineController.teacherListByDiscipline);
 
 router.post("/courses", courseController.courseCreate);
 router.get("/courses", courseController.courseList);
