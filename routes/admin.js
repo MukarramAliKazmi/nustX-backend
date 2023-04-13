@@ -5,6 +5,7 @@ const disciplineController = require("../controllers/discipline.controller");
 const courseController = require("../controllers/course.controller");
 const studentController = require("../controllers/student.controller");
 const teacherController = require("../controllers/teacher.controller");
+const enrollmentController = require("../controllers/enrollment.controller");
 
 router.post("/disciplines", disciplineController.disciplineCreate);
 router.get("/disciplines", disciplineController.disciplineList);
@@ -32,5 +33,14 @@ router.get("/teachers", teacherController.teacherList);
 router.get("/teachers/:id", teacherController.teacherDetail);
 router.put("/teachers/:id", teacherController.teacherUpdate);
 router.delete("/teachers/:id", teacherController.teacherDelete);
+
+router.post("/enrollments", enrollmentController.enrollmentCreate);
+router.get("/enrollments", enrollmentController.enrollmentList);
+router.get("/enrollments/:id", enrollmentController.enrollmentDetail);
+router.put("/enrollments/:id", enrollmentController.enrollmentUpdate);
+router.delete("/enrollments/:id", enrollmentController.enrollmentDelete);
+router.get("/enrollments/course/:courseId", enrollmentController.enrollmentStudentsByCourse);
+router.get("/enrollments/teacher/:teacherId", enrollmentController.enrollmentCoursesByTeacher);
+router.get("/enrollments/student/:studentId", enrollmentController.enrollmentCoursesByStudent);
 
 module.exports = router;
