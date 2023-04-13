@@ -10,13 +10,17 @@ const port = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 
-const adminRouter = require("./routes/admin");
+const courseRouter = require("./routes/course");
+const disciplineRouter = require("./routes/discipline");
+const enrollmentRouter = require("./routes/enrollment");
 const studentRouter = require("./routes/student");
 const teacherRouter = require("./routes/teacher");
 
-app.use("/admin", adminRouter);
-app.use("/student", studentRouter);
-app.use("/teacher", teacherRouter);
+app.use("/courses", courseRouter);
+app.use("/disciplines", disciplineRouter);
+app.use("/enrollments", enrollmentRouter);
+app.use("/students", studentRouter);
+app.use("/teachers", teacherRouter);
 
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true });
