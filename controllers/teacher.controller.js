@@ -3,9 +3,17 @@ const Teacher = require("../models/teacher.model");
 // Create a new teacher
 exports.teacherCreate = async (req, res) => {
   try {
-    const { name, username, password, gender, dateOfBirth, discipline } = req.body;
+    const { name, username, password, gender, dateOfBirth, discipline } =
+      req.body;
 
-    if (!name || !username || !password || !gender || !dateOfBirth || !discipline) {
+    if (
+      !name ||
+      !username ||
+      !password ||
+      !gender ||
+      !dateOfBirth ||
+      !discipline
+    ) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -29,9 +37,11 @@ exports.teacherCreate = async (req, res) => {
 // Get all teachers
 exports.teacherList = async (req, res) => {
   try {
-    const teachers = await Teacher.find();
+    const teachers = await Teacher.find().populate("discipline");
 
-    res.status(200).json({ message: "Teachers retrieved successfully", teachers });
+    res
+      .status(200)
+      .json({ message: "Teachers retrieved successfully", teachers });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -42,13 +52,15 @@ exports.teacherDetail = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const teacher = await Teacher.findById(id);
+    const teacher = await Teacher.findById(id).populate("discipline");
 
     if (!teacher) {
       return res.status(404).json({ message: "Teacher not found" });
     }
 
-    res.status(200).json({ message: "Teacher retrieved successfully", teacher });
+    res
+      .status(200)
+      .json({ message: "Teacher retrieved successfully", teacher });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

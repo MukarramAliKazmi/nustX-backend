@@ -4,14 +4,43 @@ const Schema = mongoose.Schema;
 
 const StudentSchema = new Schema(
   {
-    name: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    gender: { type: String, enum: ["male", "female", "other"], required: true },
-    dateOfBirth: { type: Date, required: true },
-    discipline: { type: Schema.Types.ObjectId, ref: "Discipline", required: true },
-    semester: { type: Number, required: true },
-    cgpa: { type: Number, min: 0, max: 4, required: true },
+    name: {
+      type: String,
+      required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    gender: {
+      type: String,
+      enum: ["male", "female", "other"],
+      required: true,
+    },
+    dateOfBirth: {
+      type: Date,
+      required: true,
+    },
+    discipline: {
+      type: Schema.Types.ObjectId,
+      ref: "Discipline",
+      required: true,
+    },
+    semester: {
+      type: Number,
+      required: true,
+    },
+    cgpa: {
+      type: Number,
+      min: 0,
+      max: 4,
+      required: true,
+    },
   },
   {
     timestamps: true,

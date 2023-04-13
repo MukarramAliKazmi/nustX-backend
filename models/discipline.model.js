@@ -4,8 +4,15 @@ const Schema = mongoose.Schema;
 
 const DisciplineSchema = new Schema(
   {
-    name: { type: String, required: true, unique: true },
-    semesters: { type: Number, required: true },
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    semesters: {
+      type: Number,
+      required: true,
+    },
   },
   {
     timestamps: true,

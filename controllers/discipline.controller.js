@@ -12,10 +12,7 @@ exports.disciplineCreate = async (req, res) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    const discipline = new Discipline({
-      name,
-      semesters,
-    });
+    const discipline = new Discipline({ name, semesters });
 
     await discipline.save();
 

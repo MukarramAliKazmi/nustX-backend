@@ -3,9 +3,27 @@ const Student = require("../models/student.model");
 // Create a new student
 exports.studentCreate = async (req, res) => {
   try {
-    const { name, username, password, gender, dateOfBirth, discipline, semester, cgpa } = req.body;
-    
-    if (!name || !username || !password || !gender || !dateOfBirth || !discipline || !semester || !cgpa) {
+    const {
+      name,
+      username,
+      password,
+      gender,
+      dateOfBirth,
+      discipline,
+      semester,
+      cgpa,
+    } = req.body;
+
+    if (
+      !name ||
+      !username ||
+      !password ||
+      !gender ||
+      !dateOfBirth ||
+      !discipline ||
+      !semester ||
+      !cgpa
+    ) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -31,9 +49,11 @@ exports.studentCreate = async (req, res) => {
 // Get all students
 exports.studentList = async (req, res) => {
   try {
-    const students = await Student.find();
+    const students = await Student.find().populate("discipline");
 
-    res.status(200).json({ message: "Students retrieved successfully", students });
+    res
+      .status(200)
+      .json({ message: "Students retrieved successfully", students });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -44,13 +64,15 @@ exports.studentDetail = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const student = await Student.findById(id);
+    const student = await Student.findById(id).populate("discipline");
 
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
     }
 
-    res.status(200).json({ message: "Student retrieved successfully", student });
+    res
+      .status(200)
+      .json({ message: "Student retrieved successfully", student });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
