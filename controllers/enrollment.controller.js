@@ -1,4 +1,4 @@
-const Enrollment = require("../models/enrollment");
+const Enrollment = require("../models/enrollment.model");
 
 // Create a new enrollment
 exports.enrollmentCreate = async (req, res) => {
