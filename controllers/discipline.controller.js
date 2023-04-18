@@ -27,11 +27,47 @@ exports.disciplineCreate = async (req, res) => {
 // Get all disciplines
 exports.disciplineList = async (req, res) => {
   try {
-    const disciplines = await Discipline.find().sort("name");
+    // Find all the disciplines
+    const disciplines = await Discipline.find();
+
+    // Create an empty array to store the results
+    const results = [];
+
+    // Loop through each discipline
+    for (let discipline of disciplines) {
+      // Get the discipline id
+      const disciplineId = discipline._id;
+
+      // Count the number of students in the discipline
+      const studentCount = await Student.countDocuments({
+        discipline: disciplineId,
+      });
+
+      // Count the number of courses in the discipline
+      const courseCount = await Course.countDocuments({
+        discipline: disciplineId,
+      });
+
+      // Count the number of teachers in the discipline
+      const teacherCount = await Teacher.countDocuments({
+        discipline: disciplineId,
+      });
+
+      // Push the result object to the array
+      results.push({
+        discipline: discipline,
+        studentCount,
+        courseCount,
+        teacherCount,
+      });
+    }
 
     res
       .status(200)
-      .json({ message: "Disciplines retrieved successfully", disciplines });
+      .json({
+        message: "Disciplines retrieved successfully",
+        disciplines: results,
+      });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
